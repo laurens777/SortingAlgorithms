@@ -21,3 +21,22 @@ I will prove the correctness of my implementation by a loop invariant proof usin
 
 #### Run-time Analysis
 
+​		CODE										 COST				TIME
+
+for(int i=0; i<n-1; i++) 						c<sub>1</sub>				$$\sum_{i=0}^{n-1} 1 = n$$
+	min = i 											 c<sub>2</sub>				$$\sum_{i=0}^{n-2} 1 = n-1$$
+	for(int j=i+1; j<n; j++)			    	 c<sub>3</sub>				$$\sum_{i=0}^{n-2}\sum_{j=i+1}^{n} 1 = \frac{n^2+n-2}{2}$$
+		if(a[j]<a[min])			 		    	 c<sub>4</sub>				$$\sum_{i=0}^{n-2}\sum_{j=i+1}^{n-1} 1 = \frac{n^2-n}{2}$$
+			min = j									  c<sub>5</sub>				$$\sum_{i=0}^{n-2}\sum_{j=i+1}^{n-1} 1 = \frac{n^2-n}{2}$$
+	if(min != i)										c<sub>6</sub>				$$\sum_{i=0}^{n-2} 1 = n-1$$
+		temp = a[i]								  c<sub>7</sub>				 $$\sum_{i=0}^{n-2} 1 = n-1$$
+		a[i] = a[temp]   						  c<sub>8</sub>				 $$\sum_{i=0}^{n-2} 1 = n-1$$
+		a[temp] = a[i]   						  c<sub>9</sub>				 $$\sum_{i=0}^{n-2} 1 = n-1$$
+
+Multiplying COST x TIME and adding everything up we obtain the following:
+
+c<sub>1</sub>(n) + c<sub>2</sub>(n-1) + c<sub>3</sub>( $$\frac{n^2+n-2}{2}$$ ) + c<sub>4</sub>($$\frac{n^2-n}{2}$$) + c<sub>5</sub>($$\frac{n^2-n}{2}$$) + c<sub>6</sub>(n-1) + c<sub>7</sub>(n-1) + c<sub>8</sub>(n-1) + c<sub>9</sub>(n-1)
+
+=n<sup>2</sup>(c<sub>3</sub> + c<sub>4</sub> + c<sub>5</sub>) + n(c<sub>1</sub> + c<sub>2</sub> + $$\frac{c_3}{2}$$ + $$\frac{c_4}{2}$$ + $$\frac{c_5}{2}$$ + c<sub>6</sub> + c<sub>7</sub> + c<sub>8</sub> + c<sub>9</sub>) - (c<sub>2</sub> + c<sub>3</sub> + c<sub>6</sub> + c<sub>7</sub> + c<sub>8</sub> + c<sub>9</sub>)
+
+This polynomial can be represented by an<sup>2</sup> + bn - c where a, b and c are defined in terms of the cost c<sub>i</sub>. This means that our implementation of Selection Sort runs in O(n<sup>2</sup>).
